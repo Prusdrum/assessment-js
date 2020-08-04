@@ -5,15 +5,9 @@
  */
 exports.example = () => 'hello world';
 
-/**
- * 
- * @param {string[]} propertiesToExclude 
- * @param {any[]} objects 
- * @returns {any[]}
- */
 exports.stripPrivateProperties = (propertiesToExclude, objects) => {
   if (!Array.isArray(objects) || !Array.isArray(propertiesToExclude)) {
-    throw new Error('invalid argument. both arguments should be arrays');
+    throw new Error('Invalid argument. Both arguments should be arrays');
   }
 
   return objects.map((object) => {
@@ -28,38 +22,32 @@ exports.stripPrivateProperties = (propertiesToExclude, objects) => {
   });
 };
 
-/**
- * 
- * @param {string} property 
- * @param {any[]} objects 
- * @returns {any[]}
- */
 exports.excludeByProperty = (property, objects) => {
   if (!Array.isArray(objects)) {
-    throw new Error('invalid argument. objects should be an array');
+    throw new Error('Invalid argument. Objects should be an array');
   }
 
   return objects.filter((object) => typeof object[property] === 'undefined');
 };
 
-/**
- * 
- * @param {any[]} items 
- * @returns {any[]}
- */
 exports.sumDeep = (items) => {
   if (!Array.isArray(items)) {
-    throw new Error('the argument should be an array');
+    throw new Error('The argument should be an array');
   }
 
-  return items.map((item) => {
-    if (
-      item === null ||
-      typeof item === 'undefined' ||
-      typeof item.objects === 'undefined' || 
-      !Array.isArray(item.objects)
-    ) {
-      throw new Error('passed argument is incorrect');
+  const isItemValid = (item) => {
+    return (
+      item !== null &&
+      typeof item !== 'undefined' &&
+      typeof item.objects !== 'undefined' &&
+      Array.isArray(item.objects) &&
+      item.objects.every((object) => typeof object.val !== 'undefined')
+    );
+  }
+
+  return items.map((item, index) => {
+    if (!isItemValid(item)) {
+      throw new Error(`Item with index: ${index} is incorrect`);
     }
 
     return {
@@ -69,7 +57,6 @@ exports.sumDeep = (items) => {
     }
   });
 };
-
 
 exports.applyStatusColor = (colorMap, items) => {
   if (!Array.isArray(items)) {
@@ -105,7 +92,7 @@ exports.setDefaults = (defaultValues) => {
 
 exports.fetchUserByNameAndUsersCompany = (userName, services) => {
   if (!userName) {
-    throw new Error('username is required')
+    throw new Error('UserName is required')
   }
 
   const getUserByName = (users, userName) => users.find(({ name }) => name === userName);
@@ -117,7 +104,7 @@ exports.fetchUserByNameAndUsersCompany = (userName, services) => {
     const user = getUserByName(users, userName)
 
     if (!user) {
-      throw new Error('could not find matching user');
+      throw new Error('Could not find matching user');
     }
 
     const company = await services.fetchCompanyById(user.companyId)
