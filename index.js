@@ -92,6 +92,9 @@ exports.applyStatusColor = (colorMap, items) => {
   }).filter((item) => typeof item.color !== 'undefined');
 };
 
-exports.createGreeting = () => {};
+exports.createGreeting = (greetingFunction, firstArg) => {
+  return (secondArg) => greetingFunction(firstArg, secondArg);
+};
+
 exports.setDefaults = () => {};
 exports.fetchUserByNameAndUsersCompany = () => {};
