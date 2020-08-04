@@ -69,7 +69,29 @@ exports.sumDeep = (items) => {
     }
   });
 };
-exports.applyStatusColor = () => {};
+
+
+exports.applyStatusColor = (colorMap, items) => {
+  if (!Array.isArray(items)) {
+    throw new Error('the second argument should be an array');
+  }
+
+  return items.map((item) => {
+    const matchingItem = Object
+      .entries(colorMap)
+      .find(([color, statusValues]) => statusValues.includes(item.status));
+
+    if (matchingItem === undefined || matchingItem.length === 0) {
+      return item;
+    }
+
+    return {
+      ...item,
+      color: matchingItem[0],
+    }
+  }).filter((item) => typeof item.color !== 'undefined');
+};
+
 exports.createGreeting = () => {};
 exports.setDefaults = () => {};
 exports.fetchUserByNameAndUsersCompany = () => {};
