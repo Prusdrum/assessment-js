@@ -92,8 +92,8 @@ exports.applyStatusColor = (colorMap, items) => {
   }).filter((item) => typeof item.color !== 'undefined');
 };
 
-exports.createGreeting = (greetingFunction, firstArg) => {
-  return (secondArg) => greetingFunction(firstArg, secondArg);
+exports.createGreeting = (greetingFunction, ...firstArgs) => {
+  return greetingFunction.bind(this, ...firstArgs)
 };
 
 exports.setDefaults = () => {};
