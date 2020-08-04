@@ -93,7 +93,7 @@ exports.applyStatusColor = (colorMap, items) => {
 };
 
 exports.createGreeting = (greetingFunction, ...firstArgs) => {
-  return greetingFunction.bind(this, ...firstArgs)
+  return greetingFunction.bind(this, ...firstArgs);
 };
 
 exports.setDefaults = (defaultValues) => {
@@ -103,4 +103,28 @@ exports.setDefaults = (defaultValues) => {
   });
 };
 
-exports.fetchUserByNameAndUsersCompany = () => {};
+exports.fetchUserByNameAndUsersCompany = (userName, services) => {
+  if (!userName) {
+    throw new Error('username is required')
+  }
+
+  const getUserByName = (users, userName) => users.find(({ name }) => name === userName);
+
+  return Promise.all([
+    services.fetchStatus(),
+    services.fetchUsers(),
+  ]).then(async ([status, users]) => {
+    const user = getUserByName(users, userName)
+
+    if (!user) {
+      throw new Error('could not find matching user');
+    }
+
+    const company = await services.fetchCompanyById(user.companyId)
+    return {
+      status,
+      user,
+      company
+    }
+  });
+};
