@@ -96,5 +96,11 @@ exports.createGreeting = (greetingFunction, ...firstArgs) => {
   return greetingFunction.bind(this, ...firstArgs)
 };
 
-exports.setDefaults = () => {};
+exports.setDefaults = (defaultValues) => {
+  return (object) => ({
+    ...defaultValues,
+    ...object
+  });
+};
+
 exports.fetchUserByNameAndUsersCompany = () => {};
