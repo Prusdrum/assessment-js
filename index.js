@@ -42,7 +42,33 @@ exports.excludeByProperty = (property, objects) => {
   return objects.filter((object) => typeof object[property] === 'undefined');
 };
 
-exports.sumDeep = () => {};
+/**
+ * 
+ * @param {any[]} items 
+ * @returns {any[]}
+ */
+exports.sumDeep = (items) => {
+  if (!Array.isArray(items)) {
+    throw new Error('the argument should be an array');
+  }
+
+  return items.map((item) => {
+    if (
+      item === null ||
+      typeof item === 'undefined' ||
+      typeof item.objects === 'undefined' || 
+      !Array.isArray(item.objects)
+    ) {
+      throw new Error('passed argument is incorrect');
+    }
+
+    return {
+      objects: item.objects.reduce((sum, object) => (
+        sum + object.val
+      ), 0)
+    }
+  });
+};
 exports.applyStatusColor = () => {};
 exports.createGreeting = () => {};
 exports.setDefaults = () => {};
